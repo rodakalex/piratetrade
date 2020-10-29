@@ -6,43 +6,61 @@ using namespace std;
 struct inputParam {
     unsigned long id;    // 1. Идентификатор ордера
     int instr;           // 2. Идентификатор инструмента
-    int count;           // 3. Количество в ордере
-    int amount;          // 4. Оставшееся количество в ордере
-    int res1;            // 5. Зарезервировано (всегда 0)
-    int action;          // 6. Действие (0 - удаление, 1 - добавление, 2 – исполнение)
-    int vec;             // 7. Направление (0 - покупка, 1 - продажа)
-    int custom;          // 8. Цена ордера
-    int dealCost;        // 9. Цена сделки
-    int res2;            // 10. Зарезервировано (пустая запись)
-    int res3;            // 11. Зарезервировано (пустая запись)
-    int date;            // 12. Дата GMT+3 (%4Y%m%d)
-    int time;            // 13. Время GMT+3 (%H%M%S%3N)
-    int flag;            // 14. Битовый флаги - различные признаки записи, выраженные в десятичном представлении 64-битного числа
-    int deal;            // 15. Идентификатор сделки (если нет то 0)
+    short count;         // 3. Количество в ордере
+    short amount;        // 4. Оставшееся количество в ордере
+    short action;        // 5. Действие (0 - удаление, 1 - добавление, 2 – исполнение)
+    bool vec;            // 6. Направление (0 - покупка, 1 - продажа)
+    double custom;       // 7. Цена ордера
+    double dealCost;     // 8. Цена сделки
+    int date;            // 9. Дата GMT+3 (%4Y%m%d)
+    long time;           // 10. Время GMT+3 (%H%M%S%3N)
+    int flag;            // 11. Битовый флаги - различные признаки записи, выраженные в десятичном представлении 64-битного числа
+    bool deal;           // 12. Идентификатор сделки (если нет то 0)
 };
 
 inputParam func(string *line) {
-    inputParam o{
+    inputParam fLine{
         static_cast<unsigned long>(stol(line[0])),
+        stoi(line[1]),
+        static_cast<short>(stoi(line[2])),
+        static_cast<short>(stoi(line[3])),
+        static_cast<bool>(stoi(line[4])),
+        static_cast<bool>(stoi(line[5])),
+        static_cast<double>(stoi(line[6])),
+        static_cast<double>(stoi(line[7])),
+        static_cast<int>(stoi(line[8])),
+        static_cast< long>(stol(line[12])),
+        stoi(line[13]),
+        static_cast<bool>(stoi(line[14]))
     };
-    return o;
+    return fLine;
+};
+
+inputParam getStructFromLine() {
+        string tmp;
+        string line[15];
+
+        int index = 0;
+        while(getline(cin, tmp, '\t')){
+            line[index] = tmp;
+            if(index == 14) {
+                return func(line);
+            }
+            index++;
+        }
+
 };
 
 int main() {
+    int x = 0;
     freopen("./test.log", "r", stdin);
-    string tmp;
-    int index = 0;
-    string line[15];
+    inputParam fline;
 
-    while(getline(cin, tmp, '\t')){
-        line[index] = tmp;
-
-        if(index == 14) {
-            break;
-        }
-        index++;
+    while(x != 10) {
+        fline = getStructFromLine();
+        x++;
     }
-//    inputParam o = func(line);
+
     return 0;
 }
 
